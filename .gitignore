@@ -1,0 +1,20 @@
+# Packer
+packer_cache/
+_output/
+output-*
+box/
+iso
+iso/
+*.box
+*.vdi
+
+# Vagrant
+.vagrant/
+
+# Misc
+*.tar.gz
+crash.log
+tmp
+*.swp
+.DS_Store
+.bundle

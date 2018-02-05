@@ -1,0 +1,15 @@
+{
+	"_comment": "Build with `packer build -var-file=centos7.json centos.json`",
+	"version": "0.0.1",
+	"vm_name": "centos7",
+	"cpus": "1",
+	"desktop": "false",
+	"disk_size": "4096",
+	"http_directory": "kickstart/centos7",
+	"iso_checksum": "bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5",
+	"iso_checksum_type": "sha256",
+	"iso_name": "CentOS-7-x86_64-Minimal-1708.iso",
+	"iso_url": "http://mirror.csclub.uwaterloo.ca/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso",
+	"memory": "4096",
+	"vagrantfile_template": "tpl/vagrantfile-centos7.tpl"
+  }

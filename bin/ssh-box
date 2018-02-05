@@ -1,0 +1,55 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+if [ "${DEBUG:=false}" = "true" ]; then
+  set -o xtrace
+fi
+
+usage() {
+  echo "usage: $(basename $0) BOX_PATH [virtualbox]"
+  echo
+  echo "Register a vagrant box to login to it"
+}
+
+args() {
+  if [ $# -lt 2 ]; then
+    usage
+    exit 0
+  fi
+
+  if [[ ! $2 =~ ^(virtualbox)$ ]]; then
+    echo "$(basename $0): illegal platform $2"
+    echo "Valid platforms: virtualbox"
+    usage
+    exit 1
+  fi
+
+  box_path=$1
+  box_provider=$2
+  vagrant_provider=${3:-${box_provider}}
+}
+
+# Main
+
+args "$@"
+
+box_filename=$(basename "${box_path}")
+box_name=${box_filename%.*}
+tmp_path=/tmp/boxtest
+
+rm -rf ${tmp_path}
+
+vagrant box remove ${box_name} --provider ${box_provider} || true
+vagrant box add ${box_name} ${box_path}
+mkdir -p ${tmp_path}
+
+pushd ${tmp_path}
+vagrant init ${box_name}
+VAGRANT_LOG=warn vagrant up --provider ${vagrant_provider}
+vagrant ssh
+
+sleep 10
+vagrant destroy -f
+popd
+vagrant box remove ${box_name} --provider ${box_provider}
