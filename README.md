@@ -1,4 +1,4 @@
-# Packer templates for CentOS
+# Packer templates for Linux
 
 ## Overview
 
@@ -44,6 +44,9 @@ You will now need to follow the steps in the `docs/azure-vm.md` directory.
 
 Derived heavily from [Boxcutter][boxcutter] community driven cloud templates.
 
+Additionally also consulted the [Packer guide to VM creation][microsoft] provided by Microsoft
+
 <!-- Links Referenced -->
 
 [boxcutter]:               https://github.com/boxcutter/centos
+[microsoft]:               https://docs.microsoft.com/en-us/azure/virtual-machines/windows/build-image-with-packer
