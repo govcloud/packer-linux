@@ -70,6 +70,14 @@
 			"expect_disconnect": "true"
 		},
 		{
+			"type": "ansible-local",
+			"playbook_file": "./ansible/playbook.yaml",
+			"role_paths":[],
+			"playbook_dir": "ansible",
+			"galaxy_file": "ansible/requirements.yaml",
+			"extra_arguments": [ "--extra-vars", "DESKTOP={{user `desktop`}}" ]
+		},
+		{
 			"environment_vars": [
 				"PACKER_CACHE_DIR={{user `packer_cache_dir`}}",
 				"CLEANUP_BUILD_TOOLS={{user `cleanup_build_tools`}}",
@@ -92,9 +100,9 @@
 				"scripts/sshd.sh",
 				"scripts/vagrant.sh",
 				"scripts/desktop.sh",
-				"scripts/virtualbox.sh",
 				"scripts/motd.sh",
 				"scripts/docker.sh",
+				"scripts/virtualbox.sh",
 				"custom.sh",
 				"scripts/azure.sh",
 				"scripts/cleanup.sh"
@@ -129,7 +137,7 @@
 		"ssh_username": "vagrant",
 		"azure": "false",
 		"docker": "false",
-		"update": "false",
+		"update": "true",
 		"vagrantfile_template": "",
 		"version": "0.0.1",
 		"virtualbox_guest_os_type": "RedHat_64",

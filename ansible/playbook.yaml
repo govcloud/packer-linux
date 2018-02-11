@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: true
+  become: true
+  roles:
+    - govcloud.repo-epel
+    - govcloud.common
+    - govcloud.security
+    - { role: govcloud.chrome, when: DESKTOP }
+    - { role: govcloud.vscode, when: DESKTOP }
+    - { role: govcloud.xrdp, when: DESKTOP }
