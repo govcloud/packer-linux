@@ -40,7 +40,9 @@ az storage blob upload --account-name vhdpacker \
 az disk create \
     --resource-group packer \
     --name centosMD \
-    --source https://vhdpacker.blob.core.windows.net/centos/centos7-0.0.1.vhd
+    --source https://vhdpacker.blob.core.windows.net/centos/centos7-0.0.1.vhd \
+    --size-gb 60 \
+    --sku Premium_LRS
 ```
 
 ```sh
@@ -50,7 +52,8 @@ az vm create \
     --name centosVM \
     --os-type linux \
     --size Standard_DS3_v2 \
-    --attach-os-disk centosMD
+    --attach-os-disk centosMD \
+    --os-disk-size-gb 60
 ```
 
 ## UnManaged Disk
