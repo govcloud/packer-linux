@@ -3,6 +3,7 @@
 - src: govcloud.repo-epel
 - src: govcloud.common
 - src: govcloud.chrome
+- src: govcloud.gtk-theme
 - src: govcloud.security
 - src: govcloud.vscode
 - src: govcloud.xrdp
