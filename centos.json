@@ -72,10 +72,10 @@
 		{
 			"type": "ansible-local",
 			"playbook_file": "./ansible/playbook.yaml",
-			"role_paths":[],
+			"role_paths":["ansible/roles"],
 			"playbook_dir": "ansible",
 			"galaxy_file": "ansible/requirements.yaml",
-			"extra_arguments": [ "--extra-vars", "DESKTOP={{user `desktop`}}" ]
+			"extra_arguments": [ "-vvvv", "--extra-vars", "DESKTOP={{user `desktop`}}"]
 		},
 		{
 			"environment_vars": [
