@@ -79,7 +79,7 @@ podTemplate(label: label,
             rm -f packer_${PACKER_VERSION}_linux_amd64.zip'
 
         // Image build
-        sh 'PACKER_LOG=1 packer build \
+        sh 'PACKER_LOG=1 /bin/packer build \
               -force \
               -debug \
               -var-file=centos7-desktop.json \
