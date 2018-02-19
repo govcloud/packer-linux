@@ -61,8 +61,13 @@ podTemplate(label: label,
             cd /etc/yum.repos.d/ && \
             wget http://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo && \
             yum install -y \
-              dkms \
-              kernel-devel && \
+              patch \
+              libgomp \
+              glibc-headers \
+              glibc-devel \
+              kernel-headers \
+              kernel-PAE-devel \
+              dkms && \
             yum -y groupinstall "Development Tools" && \
             if  [ "${VIRTUALBOX_VERSION}" = "latest" ]; \
               then yum install -y VirtualBox-5.2 ; \
