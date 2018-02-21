@@ -30,10 +30,12 @@ podTemplate(
     containerTemplate(name: 'vbox',
                       image: 'govcloud/docker-ubuntu:vbox',
                       command: 'cat',
-                      ttyEnabled: true),
+                      ttyEnabled: true,
+                      privileged: true),
   ],
   volumes:[
-    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
+    hostPathVolume(mountPath: '/dev/vboxdrv', hostPath: '/dev/vboxdrv')
   ]) {
 
   node (label) {
