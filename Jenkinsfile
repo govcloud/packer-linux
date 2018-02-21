@@ -27,8 +27,8 @@ podTemplate(
                       image: 'docker:1.12.6',
                       command: 'cat',
                       ttyEnabled: true),
-    containerTemplate(name: 'centos',
-                      image: 'centos:centos7',
+    containerTemplate(name: 'vbox',
+                      image: 'govcloud/ubuntu:vbox',
                       command: 'cat',
                       ttyEnabled: true),
   ],
@@ -61,30 +61,7 @@ podTemplate(
         sh "env | sort"
       }
 
-      container('centos') {
-
-        // Install deps
-        sh 'yum install -y \
-              unzip \
-              tar \
-              gzip \
-              wget && \
-            yum clean all && rm -rf /var/cache/yum/*'
-
-        // Install virtualbox
-        sh 'export VIRTUALBOX_VERSION=latest && \
-            mkdir -p /opt/virtualbox && \
-            cd /etc/yum.repos.d/ && \
-            wget http://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo && \
-            yum install -y \
-              dkms \
-              kernel-devel && \
-            yum -y groupinstall "Development Tools" && \
-            if  [ "${VIRTUALBOX_VERSION}" = "latest" ]; \
-              then yum install -y VirtualBox-5.2 ; \
-              else yum install -y VirtualBox-5.2-${VIRTUALBOX_VERSION} ; \
-            fi && \
-            yum clean all && rm -rf /var/cache/yum/*'
+      container('vbox') {
 
         // Install packer
         sh 'curl -L -o packer_${PACKER_VERSION}_linux_amd64.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip && \
