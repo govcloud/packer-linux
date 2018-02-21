@@ -28,7 +28,7 @@ podTemplate(
                       command: 'cat',
                       ttyEnabled: true),
     containerTemplate(name: 'vbox',
-                      image: 'govcloud/ubuntu:vbox',
+                      image: 'govcloud/docker-ubuntu:vbox',
                       command: 'cat',
                       ttyEnabled: true),
   ],
@@ -63,16 +63,8 @@ podTemplate(
 
       container('vbox') {
 
-        // Install packer
-        sh 'curl -L -o packer_${PACKER_VERSION}_linux_amd64.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip && \
-            curl -L -o packer_${PACKER_VERSION}_SHA256SUMS https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS && \
-            sed -i "/packer_${PACKER_VERSION}_linux_amd64.zip/!d" packer_${PACKER_VERSION}_SHA256SUMS && \
-            sha256sum -c packer_${PACKER_VERSION}_SHA256SUMS && \
-            unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /bin && \
-            rm -f packer_${PACKER_VERSION}_linux_amd64.zip'
-
         // Image build
-        sh '/bin/packer build \
+        sh 'packer build \
               -force \
               -var-file=centos7-desktop.json \
               -var "azure=true" \
