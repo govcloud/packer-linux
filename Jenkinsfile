@@ -8,7 +8,8 @@
 def pipeline = new io.estrado.Pipeline()
 def label = "packer-linux-${UUID.randomUUID().toString()}"
 
-podTemplate(label: label,
+podTemplate(
+  label: label,
   envVars: [
     envVar(key: 'PACKER_VERSION', value: '1.2.0')
   ],
@@ -36,14 +37,29 @@ podTemplate(label: label,
   ]) {
 
   node (label) {
-    stage('Run shell') {
+    stage('Create immutable image') {
 
-      //def pwd = pwd()
-      //def inputFile = readFile('Jenkinsfile.json')
-      //def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
-      //println "pipeline config ==> ${config}"
+      checkout scm
 
-      git 'https://github.com/govcloud/packer-linux.git'
+      def pwd = pwd()
+      def inputFile = readFile('Jenkinsfile.json')
+      def config = new groovy.json.JsonSlurperClassic().parseText(inputFile)
+      println "pipeline config ==> ${config}"
+
+      // continue only if pipeline enabled
+      if (!config.pipeline.enabled) {
+          println "pipeline disabled"
+          return
+      }
+
+      // set additional git envvars for image tagging
+      pipeline.gitEnvVars()
+
+      // If pipeline debugging enabled
+      if (config.pipeline.debug) {
+        println "DEBUG ENABLED"
+        sh "env | sort"
+      }
 
       container('centos') {
 
@@ -61,13 +77,8 @@ podTemplate(label: label,
             cd /etc/yum.repos.d/ && \
             wget http://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo && \
             yum install -y \
-              patch \
-              libgomp \
-              glibc-headers \
-              glibc-devel \
-              kernel-headers \
-              kernel-PAE-devel \
-              dkms && \
+              dkms \
+              kernel-devel && \
             yum -y groupinstall "Development Tools" && \
             if  [ "${VIRTUALBOX_VERSION}" = "latest" ]; \
               then yum install -y VirtualBox-5.2 ; \
@@ -84,9 +95,8 @@ podTemplate(label: label,
             rm -f packer_${PACKER_VERSION}_linux_amd64.zip'
 
         // Image build
-        sh 'PACKER_LOG=1 /bin/packer build \
+        sh '/bin/packer build \
               -force \
-              -debug \
               -var-file=centos7-desktop.json \
               -var "azure=true" \
               centos.json'

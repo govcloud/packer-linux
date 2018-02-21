@@ -7,16 +7,6 @@
 	  "test": true,
 	  "hostname": "packer-linux.govcloud.ca"
 	},
-	"container_repo": {
-	  "host": "quay.io",
-	  "master_acct": "sylus",
-	  "alt_acct": "sylus",
-	  "jenkins_creds_id": "registry_creds",
-	  "repo": "packer-linux",
-	  "dockeremail": ".",
-	  "dockerfile": "./",
-	  "image_scanning": false
-	},
 	"pipeline": {
 		"enabled": true,
 		"debug": false,
