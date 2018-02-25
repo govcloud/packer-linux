@@ -75,7 +75,7 @@
 			"role_paths":["ansible/roles"],
 			"playbook_dir": "ansible",
 			"galaxy_file": "ansible/requirements.yaml",
-			"extra_arguments": [ "-vvvv", "--extra-vars", "DESKTOP={{user `desktop`}}"]
+			"extra_arguments": [ "--extra-vars", "DESKTOP={{user `desktop`}}"]
 		},
 		{
 			"environment_vars": [
@@ -115,7 +115,7 @@
 		"cleanup_build_tools": "false",
 		"cpus": "1",
 		"desktop": "false",
-		"disk_size": "6144",
+		"disk_size": "30720",
 		"ftp_proxy": "{{env `ftp_proxy`}}",
 		"headless": "true",
 		"http_directory": "kickstart/centos7",

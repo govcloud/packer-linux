@@ -4,7 +4,7 @@
 	"vm_name": "centos7-atomic",
 	"cpus": "1",
 	"desktop": "false",
-	"disk_size": "4096",
+	"disk_size": "8192",
 	"http_directory": "kickstart/centos7-atomic",
 	"iso_checksum": "da75f66c22f8c79f0803791c28f6a5c406c400466e429fcae1bb0a71eef2d6b4",
 	"iso_checksum_type": "sha256",

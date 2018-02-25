@@ -5,7 +5,7 @@
   become: true
   roles:
     - govcloud.repo-epel
-    - govcloud.common
+    - { role: govcloud.common, users: [{ username: vagrant }] }
     - govcloud.security
     - { role: govcloud.gtk-theme, when: DESKTOP }
     - { role: govcloud.chrome, when: DESKTOP }
