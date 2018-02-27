@@ -14,6 +14,7 @@ podTemplate(
     envVar(key: 'PACKER_VERSION', value: '1.2.0')
   ],
   nodeSelector: 'ci=vbox',
+  serviceAccount: 'jenkins-jenkins',
   containers: [
     containerTemplate(name: 'jnlp',
                       image: 'jenkins/jnlp-slave:3.16-1-alpine',
