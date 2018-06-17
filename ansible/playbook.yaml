@@ -7,7 +7,6 @@
     - govcloud.repo-epel
     - { role: govcloud.common, users: [{ username: vagrant }] }
     - govcloud.security
-    - { role: govcloud.gtk-theme, when: DESKTOP }
     - { role: govcloud.chrome, when: DESKTOP }
     - { role: govcloud.vscode, when: DESKTOP }
     - { role: govcloud.xrdp, when: DESKTOP }
