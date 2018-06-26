@@ -4,7 +4,7 @@
 	"vm_name": "centos7",
 	"cpus": "1",
 	"desktop": "false",
-	"disk_size": "8192",
+	"disk_size": "20480",
 	"docker": "true",
 	"http_directory": "kickstart/centos7",
 	"iso_checksum": "714acc0aefb32b7d51b515e25546835e55a90da9fb00417fbee2d03a62801efd",
