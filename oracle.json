@@ -1,0 +1,148 @@
+{
+	"_comment": "Build with `packer build oracle.json`",
+	"builders": [{
+		"boot_command": [
+			"<up><wait><tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/{{ user `kickstart` }}<enter>"
+		],
+		"disk_size": "{{ user `disk_size` }}",
+		"guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+		"guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
+		"hard_drive_interface": "sata",
+		"headless": "{{ user `headless` }}",
+		"http_directory": "{{ user `http_directory` }}",
+		"iso_checksum": "{{ user `iso_checksum` }}",
+		"iso_checksum_type": "{{ user `iso_checksum_type` }}",
+		"iso_urls": [
+			"{{ user `iso_path` }}/{{ user `iso_name` }}",
+			"{{ user `iso_url` }}"
+		],
+		"output_directory": "_output/output-{{ user `vm_name` }}-virtualbox-iso",
+		"shutdown_command": "{{ user `shutdown_command` }}",
+		"ssh_password": "{{ user `ssh_password` }}",
+		"ssh_username": "{{ user `ssh_username` }}",
+		"ssh_wait_timeout": "10000s",
+		"type": "virtualbox-iso",
+		"vboxmanage": [
+			[
+				"modifyvm", "{{.Name}}", "--memory", "{{ user `memory` }}"
+			],
+			[
+				"modifyvm", "{{.Name}}", "--cpus", "{{ user `cpus` }}"
+			],
+			[
+				"modifyvm", "{{.Name}}", "--paravirtprovider", "{{ user `virtualbox_paravirtprovider` }}"
+			],
+			[
+				"modifyvm", "{{.Name}}", "--nictype1", "{{ user `virtualbox_nictype` }}"
+			]
+		],
+		"virtualbox_version_file": ".vbox_version",
+		"vm_name": "{{ user `vm_name` }}"
+	}],
+	"post-processors": [{
+		"keep_input_artifact": true,
+		"output": "_output/box/{{.Provider}}/{{user `vm_name`}}-{{user `version`}}.box",
+		"type": "vagrant",
+		"vagrantfile_template": "{{ user `vagrantfile_template` }}"
+	}],
+	"provisioners": [{
+			"environment_vars": [
+				"PACKER_CACHE_DIR={{user `packer_cache_dir`}}",
+				"CLEANUP_BUILD_TOOLS={{user `cleanup_build_tools`}}",
+				"DESKTOP={{user `desktop`}}",
+				"AZURE={{user `azure`}}",
+				"DOCKER={{user `docker`}}",
+				"UPDATE={{user `update`}}",
+				"INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
+				"SSH_USERNAME={{user `ssh_username`}}",
+				"SSH_PASSWORD={{user `ssh_password`}}",
+				"http_proxy={{user `http_proxy`}}",
+				"https_proxy={{user `https_proxy`}}",
+				"ftp_proxy={{user `ftp_proxy`}}",
+				"rsync_proxy={{user `rsync_proxy`}}",
+				"no_proxy={{user `no_proxy`}}"
+			],
+			"execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+			"scripts": [
+				"scripts/update.sh"
+			],
+			"type": "shell",
+			"expect_disconnect": "true"
+		},
+		{
+			"type": "ansible-local",
+			"playbook_file": "./ansible/playbook.yaml",
+			"role_paths":["ansible/roles"],
+			"playbook_dir": "ansible",
+			"galaxy_file": "ansible/requirements.yaml",
+			"extra_arguments": [ "--extra-vars", "DESKTOP={{user `desktop`}}"]
+		},
+		{
+			"environment_vars": [
+				"PACKER_CACHE_DIR={{user `packer_cache_dir`}}",
+				"CLEANUP_BUILD_TOOLS={{user `cleanup_build_tools`}}",
+				"DESKTOP={{user `desktop`}}",
+				"AZURE={{user `azure`}}",
+				"DOCKER={{user `docker`}}",
+				"UPDATE={{user `update`}}",
+				"INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
+				"SSH_USERNAME={{user `ssh_username`}}",
+				"SSH_PASSWORD={{user `ssh_password`}}",
+				"http_proxy={{user `http_proxy`}}",
+				"https_proxy={{user `https_proxy`}}",
+				"ftp_proxy={{user `ftp_proxy`}}",
+				"rsync_proxy={{user `rsync_proxy`}}",
+				"no_proxy={{user `no_proxy`}}"
+			],
+			"execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+			"scripts": [
+				"scripts/slow-dns.sh",
+				"scripts/sshd.sh",
+				"scripts/vagrant.sh",
+				"scripts/desktop.sh",
+				"scripts/motd.sh",
+				"scripts/docker.sh",
+				"scripts/virtualbox.sh",
+				"custom.sh",
+				"scripts/azure.sh",
+				"scripts/cleanup.sh"
+			],
+			"type": "shell",
+			"pause_before": "10s"
+		}
+	],
+	"variables": {
+		"cleanup_build_tools": "false",
+		"cpus": "1",
+		"desktop": "false",
+		"disk_size": "30720",
+		"ftp_proxy": "{{env `ftp_proxy`}}",
+		"headless": "true",
+		"http_directory": "kickstart/oracle76",
+		"http_proxy": "{{env `http_proxy`}}",
+		"https_proxy": "{{env `https_proxy`}}",
+		"install_vagrant_key": "true",
+		"iso_checksum": "a3156e9dc53ace74b81f6e37f284b74498057efd02babebd88aa2a51cc44d7e7",
+		"iso_checksum_type": "sha256",
+		"iso_name": "OracleLinux-R7-U6-Server-x86_64-dvd.iso",
+		"iso_path": "iso",
+		"iso_url": "https://mirrors.dotsrc.org/oracle-linux/OL7/u6/x86_64/OracleLinux-R7-U6-Server-x86_64-dvd.iso",
+		"kickstart": "ks.cfg",
+		"memory": "512",
+		"packer_cache_dir": "_output/packer_cache",
+		"no_proxy": "{{env `no_proxy`}}",
+		"rsync_proxy": "{{env `rsync_proxy`}}",
+		"shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+		"ssh_password": "vagrant",
+		"ssh_username": "vagrant",
+		"azure": "false",
+		"docker": "false",
+		"update": "true",
+		"vagrantfile_template": "",
+		"version": "0.0.1",
+		"virtualbox_guest_os_type": "RedHat_64",
+		"virtualbox_paravirtprovider": "default",
+		"virtualbox_nictype": "virtio",
+		"vm_name": "oracle76"
+	}
+}
